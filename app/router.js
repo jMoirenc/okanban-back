@@ -10,4 +10,6 @@ router.get("/lists/:id", listController.getOneList);
 router.patch("/lists/:id", listController.updateList);
 router.delete("/lists/:id", listController.deleteList);
 
+router.get("/lists/:id/cards", listController.getOneListCards);
+
 module.exports = router;

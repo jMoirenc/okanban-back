@@ -138,6 +138,31 @@ const listController = {
       res.status(500).json("unexpected error");
     }    
   },
+
+  async getOneListCards (req, res) {
+    try{
+      const id = req.params.id;      
+      const list = await List.findByPk(id,
+        {
+          include: {
+            association: 'cards',
+            include: 'tags'
+          },
+          order: [          
+            ['cards', 'position', 'ASC'],
+          ],
+        }
+      );
+      if (list){
+        res.json(list.cards);
+      }else{
+        res.status(404).json("list not found");  
+      }
+    }catch(error){
+      console.trace(error);
+      res.status(500).json("unexpected error");
+    }
+  },
 };
 
 module.exports = listController;
