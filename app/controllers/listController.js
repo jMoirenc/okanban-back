@@ -28,7 +28,14 @@ const listController = {
   getOneList: async (req, res) => {
     try{
       const id = req.params.id;      
-      const list = await List.findByPk(id);
+      const list = await List.findByPk(id,
+        {
+          include: {
+            association: 'cards',
+            include: 'tags'
+          },
+        }
+      );
       if (list){
         res.json(list);
       }else{
