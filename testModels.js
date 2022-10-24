@@ -4,18 +4,22 @@ const { List, Card, Tag }  = require('./app/models');
 
 (async () => {  
 
+  try {
+    const lists = await List.findAll({ include: { model: Card, as: 'cards' }});
+    console.log(lists);
 
-  const lists = await List.findAll({ include: { model: Card, as: 'cards' }});
-  console.log(lists);
+    const cards = await Card.findAll({ include: { model: Tag, as: 'tags' }});
 
-  const cards = await Card.findAll({ include: { model: Tag, as: 'tags' }});
-
-  for (card of cards){    
-    console.log(card.content);
-    console.log(card.color);
-    
-    for (tag of card.tags){    
-      console.log(tag.name);
+    for (card of cards){    
+      console.log(card.content);
+      console.log(card.color);
+      
+      for (tag of card.tags){    
+        console.log(tag.name);
+      }
     }
+  }catch (error){
+    console.trace(error);
   }
+  
 })();
