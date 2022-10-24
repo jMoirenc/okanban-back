@@ -1,6 +1,29 @@
+const { List } = require ('../models/index');
+
 const listController = {
   getAllLists: async (req, res) => {
-    res.send('lists index');
+    try{
+      const lists = await List.findAll({order: ['position']});
+      res.json(lists);
+    }catch(error){
+      console.trace(error);
+      res.status(500).json("unexpected error");
+    }    
+  },
+
+  getOneList: async (req, res) => {
+    try{
+      const id = req.params.id;      
+      const list = await List.findByPk(id);
+      if (list){
+        res.json(list);
+      }else{
+        res.status(404).json("list not found");  
+      }
+    }catch(error){
+      console.trace(error);
+      res.status(500).json("unexpected error");
+    }    
   },
 };
 
