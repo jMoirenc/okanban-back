@@ -8,13 +8,40 @@ const cardController = {
       const id = req.params.id;
       const tagId = req.body.tag_id;
 
-      const card = await Card.findByPk(id, { include: 'tags' });
+      const card = await Card.findByPk(id);
 
       if (card){
         const tag = await Tag.findByPk(tagId);
         if (tag){
-          card.addTag(tagId);
-          res.json(card);
+          await card.addTag(tagId);
+          const updatedCard = await Card.findByPk(id, { include: 'tags' });
+          res.json(updatedCard);
+        }else{
+          res.status(400).json("bad tag_id");  
+        }
+      }else{
+        res.status(404).json("card not found");
+      }
+
+    }catch(error){
+      console.trace(error);
+      res.status(500).json("unexpected error");
+    }
+  },  
+
+  async unasociateTag(req, res) {
+    try{
+      const id = req.params.id;
+      const tagId = req.params.tag_id;
+
+      const card = await Card.findByPk(id);
+
+      if (card){
+        const tag = await Tag.findByPk(tagId);
+        if (tag){
+          await card.removeTag(tagId);
+          const updatedCard = await Card.findByPk(id, { include: 'tags' });
+          res.json(updatedCard);
         }else{
           res.status(400).json("bad tag_id");  
         }

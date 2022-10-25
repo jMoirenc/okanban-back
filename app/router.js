@@ -16,5 +16,6 @@ router.get("/lists/:id/cards", listController.getOneListCards);
 
 // Cards
 router.post("/cards/:id/tag", cardController.associateTag);
+router.delete("/cards/:id/tag/:tag_id", cardController.unasociateTag);
 
 module.exports = router;
