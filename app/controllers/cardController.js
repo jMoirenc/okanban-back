@@ -41,6 +41,7 @@ const cardController = {
         if (tag){
           await card.removeTag(tagId);
           const updatedCard = await Card.findByPk(id, { include: 'tags' });
+          // note : ici on pourrait également utiliser reload (avec le include tout pareil)
           res.json(updatedCard);
         }else{
           res.status(400).json("bad tag_id");  
