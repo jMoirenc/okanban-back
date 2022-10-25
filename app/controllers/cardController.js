@@ -13,9 +13,14 @@ const cardController = {
       if (card){
         const tag = await Tag.findByPk(tagId);
         if (tag){
-          await card.addTag(tagId);
-          const updatedCard = await Card.findByPk(id, { include: 'tags' });
-          res.json(updatedCard);
+          if (!await card.hasTag(tag)){
+            await card.addTag(tagId);
+            const updatedCard = await Card.findByPk(id, { include: 'tags' });
+            res.json(updatedCard);
+          }else{
+            res.status(400).json("tag_id already associated");  
+          }
+          
         }else{
           res.status(400).json("bad tag_id");  
         }
