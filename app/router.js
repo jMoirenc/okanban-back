@@ -1,12 +1,19 @@
 const express = require('express');
+const csrf = require('csurf');
 const router = express.Router();
 
+const formController = require ('./controllers/formController');
 const listController = require ('./controllers/listController');
 const cardController = require ('./controllers/cardController');
 
+const csrfProtection = csrf({ cookie: true });
+
+// Form
+router.get("/form", csrfProtection, formController.index);
+
 // Lists
 router.get("/lists", listController.getAllLists);
-router.post("/lists", listController.addList);
+router.post("/lists", csrfProtection, listController.addList);
 
 router.get("/lists/:id", listController.getOneList);
 router.patch("/lists/:id", listController.updateList);
